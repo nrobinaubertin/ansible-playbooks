@@ -1,4 +1,4 @@
-- hosts: centos
+- hosts: centos7
   remote_user: root
   vars:
     main_username: "niels" # main account with sudo access
@@ -31,8 +31,7 @@
     - name: Add main user
       user:
         name: "{{ main_username }}"
-        # only in 2.6
-        # password_lock: yes # the account should only be accessible with an ssh key anyway
+        password_lock: yes # the account should only be accessible with an ssh key anyway
         state: present
     - name: Add main user to sudoers file
       lineinfile:
@@ -58,16 +57,7 @@
         name: sshd
         enabled: yes
         state: restarted
-
-#    - name: Add repositories
-#      yum_repository:
-#        name: epel
-#        baseurl:
-#    - name: Add packages
-#      yum:
-#        name: {{ packages }}
-#        state: latest
-##    - name: "Lock root account"
-##      user:
-##        name: root
-##        password_lock: yes # lock it up !
+    - name: Lock root
+      user:
+        name: root
+        password_lock: yes
