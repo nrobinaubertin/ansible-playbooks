@@ -3,14 +3,14 @@
   vars:
     main_username: "niels" # main account with sudo access
     ssh_public_key: "./id_rsa.pub" # ssh keys to add to authorized
-    hostname: "srv-*"
+    hostname: "*"
   tasks:
     - name: Set the hostname
       # hostname trick from https://garthkerr.com/meaningful-hostnames-with-ansible
       hostname:
-        name: "{{ hostname.replace('*', ansible_distribution + '-c' + ansible_processor_vcpus|string + '-m' + ansible_memtotal_mb|string + '-' + (ansible_all_ipv4_addresses|hash('sha512'))[0:6]) }}"
+        name: "{{ hostname.replace('*', lower(ansible_distribution) + '-' + ansible_processor_vcpus|string + '-' + ansible_memtotal_mb|string + '-' + (ansible_all_ipv4_addresses|hash('sha512'))[0:3]) }}"
     - name: Update system
-      yum: # yum module: only works with python 2 (default on centos 7)
+      yum:
         name: '*'
         state: latest
     - name: Install yum-cron
