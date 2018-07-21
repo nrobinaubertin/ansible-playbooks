@@ -1,0 +1,73 @@
+- hosts: centos
+  remote_user: root
+  vars:
+    main_username: "niels" # main account with sudo access
+    ssh_public_key: "./id_rsa.pub" # ssh keys to add to authorized
+    hostname: "srv-*"
+  tasks:
+    - name: Set the hostname
+      # hostname trick from https://garthkerr.com/meaningful-hostnames-with-ansible
+      hostname:
+        name: "{{ hostname.replace('*', ansible_distribution + '-c' + ansible_processor_vcpus|string + '-m' + ansible_memtotal_mb|string + '-' + (ansible_all_ipv4_addresses|hash('sha512'))[0:6]) }}"
+    - name: Update system
+      yum: # yum module: only works with python 2 (default on centos 7)
+        name: '*'
+        state: latest
+    - name: Install yum-cron
+      yum:
+        name: yum-cron
+        state: latest
+    - name: Set yum-cron
+      lineinfile:
+        dest: "/etc/yum/yum-cron.conf"
+        regexp: "apply_updates = no"
+        line: "apply_updates = yes"
+        state: present
+    - name: Enable yum-cron
+      systemd:
+        name: yum-cron
+        enabled: yes
+        state: started
+    - name: Add main user
+      user:
+        name: "{{ main_username }}"
+        # only in 2.6
+        # password_lock: yes # the account should only be accessible with an ssh key anyway
+        state: present
+    - name: Add main user to sudoers file
+      lineinfile:
+        dest: "/etc/sudoers"
+        regexp: "{{ main_username }} ALL" # check if this line already exists
+        line: "{{ main_username }} ALL=(ALL) NOPASSWD: ALL"
+        state: present
+    - name: Set new sshd_config file
+      copy:
+        src: "./sshd_config"
+        dest: "/etc/ssh/sshd_config"
+        owner: root
+        group: root
+        mode: 0655
+    - name: Authorize ssh key
+      authorized_key:
+        user: "{{ main_username }}"
+        state: present
+        key: "{{ lookup('file', ssh_public_key) }}"
+        path: "/etc/ssh/authorized_keys/{{ main_username }}"
+    - name: restart sshd
+      systemd:
+        name: sshd
+        enabled: yes
+        state: restarted
+
+#    - name: Add repositories
+#      yum_repository:
+#        name: epel
+#        baseurl:
+#    - name: Add packages
+#      yum:
+#        name: {{ packages }}
+#        state: latest
+##    - name: "Lock root account"
+##      user:
+##        name: root
+##        password_lock: yes # lock it up !
