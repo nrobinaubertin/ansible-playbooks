@@ -1,0 +1,31 @@
+- hosts: centos7
+  remote_user: niels
+  become: yes
+  vars:
+    packages:
+      - yum-utils
+      - device-mapper-persistent-data
+      - lvm2
+  tasks:
+    - name: Install utilities for docker
+      yum:
+        name: "{{ packages }}"
+        state: latest
+    - name: Add docker repo
+      yum_repository:
+        name: "docker-ce"
+        baseurl: "https://download.docker.com/linux/centos/7/x86_64/stable/"
+        description: "Official docker stable repository for centos"
+        gpgkey: "https://download.docker.com/linux/centos/gpg"
+        gpgcheck: yes
+        enabled: yes
+        state: present
+    - name: Install docker-ce
+      yum:
+        name: docker-ce
+        state: latest
+    - name: Enable docker
+      systemd:
+        name: docker
+        enabled: yes
+        state: started
