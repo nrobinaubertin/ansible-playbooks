@@ -1,0 +1,36 @@
+- hosts: "{{ host }}"
+  remote_user: "{{ username }}"
+  become: yes
+  vars:
+    packages:
+      - git
+      - python-docker-py
+    shared_dir: "/mnt"
+  tasks:
+    - name: Install utilities for docker
+      yum:
+        name: "{{ packages }}"
+        state: latest
+    - name: Clone dockerfiles repo
+      git:
+        repo: "https://github.com/nrobinaubertin/dockerfiles.git"
+        # we don't need to keep the repository
+        dest: "/tmp/git/dockerfiles"
+    - name: Create samba image
+      docker_image:
+        state: present
+        name: "samba"
+        path: "/tmp/git/dockerfiles/samba"
+    - name: Start samba container
+      docker_container:
+        image: "samba"
+        name: "samba"
+        published_ports:
+          - "137:7137"
+          - "138:7138"
+          - "139:7139"
+          - "445:7445"
+        restart_policy: "unless-stopped"
+        state: started
+        volumes:
+          - "{{ shared_dir }}:/shared"
