@@ -1,11 +1,12 @@
-- hosts: centos7
-  remote_user: niels
+- hosts: "{{ host }}"
+  remote_user: "{{ username }}"
   become: yes
   vars:
     packages:
       - yum-utils
       - device-mapper-persistent-data
       - lvm2
+      - python-docker-py
   tasks:
     - name: Install utilities for docker
       yum:
