@@ -1,14 +1,10 @@
-- hosts: centos7
+- hosts: "{{ host }}"
   remote_user: root
-  vars:
-    main_username: "niels" # main account with sudo access
-    ssh_public_key: "./id_rsa.pub" # ssh keys to add to authorized
-    hostname: "*"
   tasks:
     - name: Set the hostname
       # hostname trick from https://garthkerr.com/meaningful-hostnames-with-ansible
       hostname:
-        name: "{{ hostname.replace('*', lower(ansible_distribution) + '-' + ansible_processor_vcpus|string + '-' + ansible_memtotal_mb|string + '-' + (ansible_all_ipv4_addresses|hash('sha512'))[0:3]) }}"
+        name: "{{ hostname.replace('*', (ansible_all_ipv4_addresses|hash('sha512'))[0:4]) }}"
     - name: Update system
       yum:
         name: '*'
@@ -30,14 +26,14 @@
         state: started
     - name: Add main user
       user:
-        name: "{{ main_username }}"
+        name: "{{ username }}"
         password_lock: yes # the account should only be accessible with an ssh key anyway
         state: present
     - name: Add main user to sudoers file
       lineinfile:
         dest: "/etc/sudoers"
-        regexp: "{{ main_username }} ALL" # check if this line already exists
-        line: "{{ main_username }} ALL=(ALL) NOPASSWD: ALL"
+        regexp: "{{ username }} ALL" # check if this line already exists
+        line: "{{ username }} ALL=(ALL) NOPASSWD: ALL"
         state: present
     - name: Set new sshd_config file
       copy:
@@ -48,10 +44,10 @@
         mode: 0655
     - name: Authorize ssh key
       authorized_key:
-        user: "{{ main_username }}"
+        user: "{{ username }}"
         state: present
         key: "{{ lookup('file', ssh_public_key) }}"
-        path: "/etc/ssh/authorized_keys/{{ main_username }}"
+        path: "/etc/ssh/authorized_keys/{{ username }}"
     - name: restart sshd
       systemd:
         name: sshd
