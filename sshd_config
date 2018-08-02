@@ -37,7 +37,6 @@ GSSAPIAuthentication no
 UsePAM yes
 
 # The default is to check both .ssh/authorized_keys and .ssh/authorized_keys2
-# but this is overridden so installations will only check .ssh/authorized_keys
 AuthorizedKeysFile  /etc/ssh/authorized_keys/%u
 
 # Saying "no" does not improve security

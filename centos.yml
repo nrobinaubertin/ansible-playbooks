@@ -1,17 +1,20 @@
 - hosts: "{{ host }}"
   remote_user: root
+  vars:
+    packages:
+      - yum-cron
+      - libselinux-python
   tasks:
     - name: Set the hostname
-      # hostname trick from https://garthkerr.com/meaningful-hostnames-with-ansible
       hostname:
         name: "{{ hostname.replace('*', (ansible_all_ipv4_addresses|hash('sha512'))[0:4]) }}"
     - name: Update system
       yum:
         name: '*'
         state: latest
-    - name: Install yum-cron
+    - name: Install packages
       yum:
-        name: yum-cron
+        name: "{{ packages }}"
         state: latest
     - name: Set yum-cron
       lineinfile:
@@ -42,6 +45,14 @@
         owner: root
         group: root
         mode: 0655
+    - name: Restrict rights of /etc/ssh
+      file:
+        mode: 0711
+        path: /etc/ssh
+    - name: Restrict rights of /etc
+      file:
+        mode: 0711
+        path: /etc
     - name: Authorize ssh key
       authorized_key:
         user: "{{ username }}"
