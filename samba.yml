@@ -16,12 +16,12 @@
         repo: "https://github.com/nrobinaubertin/dockerfiles.git"
         # we don't need to keep the repository
         dest: "/tmp/git/dockerfiles"
-    - name: Create samba image
+    - name: Create image
       docker_image:
         state: present
         name: "samba"
         path: "/tmp/git/dockerfiles/samba"
-    - name: Start samba container
+    - name: Start container
       docker_container:
         image: "samba"
         name: "samba"
