@@ -1,0 +1,32 @@
+- hosts: "{{ host }}"
+  remote_user: "{{ username }}"
+  become: yes
+  vars:
+    packages:
+      - git
+      - python-docker-py
+    domains: "niels.xyz;www.niels.xyz"
+    certs_dir: "/certs"
+  tasks:
+    - name: Install utilities for docker
+      yum:
+        name: "{{ packages }}"
+        state: latest
+    - name: Clone dockerfiles repo
+      git:
+        repo: "https://github.com/nrobinaubertin/dockerfiles.git"
+        # we don't need to keep the repository
+        dest: "/tmp/git/dockerfiles"
+    - name: Create image
+      docker_image:
+        state: present
+        name: "acme"
+        path: "/tmp/git/dockerfiles/NOT_READY/acme"
+    - name: Start container
+      docker_container:
+        image: "acme"
+        name: "acme"
+        restart_policy: "unless-stopped"
+        state: started
+        volumes:
+          - "{{ certs_dir }}:/certs"
