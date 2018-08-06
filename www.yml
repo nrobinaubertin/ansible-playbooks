@@ -1,0 +1,36 @@
+- hosts: "{{ host }}"
+  remote_user: "{{ username }}"
+  become: yes
+  vars:
+    packages:
+      - git
+      - python-docker-py
+    certs_dir: "/certs"
+    www_dir: "/www"
+  tasks:
+    - name: Install utilities for docker
+      yum:
+        name: "{{ packages }}"
+        state: latest
+    - name: Clone dockerfiles repo
+      git:
+        repo: "https://github.com/nrobinaubertin/dockerfiles.git"
+        # we don't need to keep the repository
+        dest: "/tmp/git/dockerfiles"
+    - name: Create image
+      docker_image:
+        state: present
+        name: "www"
+        path: "/tmp/git/dockerfiles/NOT_READY/nginx-php"
+    - name: Start container
+      docker_container:
+        image: "www"
+        name: "www"
+        restart_policy: "unless-stopped"
+        state: started
+        volumes:
+          - "{{ certs_dir }}:/certs"
+          - "{{ www_dir }}:/www"
+        env:
+          VIRTUAL_HOST: "niels.xyz"
+          HTTP_ONLY: "true"
