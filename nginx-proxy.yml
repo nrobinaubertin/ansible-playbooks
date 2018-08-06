@@ -1,0 +1,35 @@
+- hosts: "{{ host }}"
+  remote_user: "{{ username }}"
+  become: yes
+  vars:
+    packages:
+      - git
+      - python-docker-py
+    certs_dir: "/certs"
+  tasks:
+    - name: Install utilities for docker
+      yum:
+        name: "{{ packages }}"
+        state: latest
+    - name: Clone dockerfiles repo
+      git:
+        repo: "https://github.com/nrobinaubertin/dockerfiles.git"
+        # we don't need to keep the repository
+        dest: "/tmp/git/dockerfiles"
+    - name: Create image
+      docker_image:
+        state: present
+        name: "nginx-proxy"
+        path: "/tmp/git/dockerfiles/NOT_READY/nginx-proxy"
+    - name: Start container
+      docker_container:
+        image: "nginx-proxy"
+        name: "nginx-proxy"
+        restart_policy: "unless-stopped"
+        state: started
+        volumes:
+          - "{{ certs_dir }}:/certs"
+          - "/var/run/docker.sock:/var/run/docker.sock:ro"
+        ports:
+          - "80:8080"
+          - "443:8443"
