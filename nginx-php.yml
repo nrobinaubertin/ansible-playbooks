@@ -7,6 +7,10 @@
       - python-docker-py
     certs_dir: "/certs"
     www_dir: "/www"
+    php_ext: ""
+    name: "nginx-php"
+    virtual_host: ""
+    http_only: ""
   tasks:
     - name: Install utilities for docker
       yum:
@@ -20,17 +24,18 @@
     - name: Create image
       docker_image:
         state: present
-        name: "www"
+        name: "{{ name }}"
         path: "/tmp/git/dockerfiles/NOT_READY/nginx-php"
     - name: Start container
       docker_container:
-        image: "www"
-        name: "www"
+        image: "{{ name }}"
+        name: "{{ name }}"
         restart_policy: "unless-stopped"
         state: started
         volumes:
           - "{{ certs_dir }}:/certs"
           - "{{ www_dir }}:/www"
         env:
-          VIRTUAL_HOST: "niels.xyz"
-          HTTP_ONLY: "true"
+          VIRTUAL_HOST: "{{ virtual_host }}"
+          HTTP_ONLY: "{{ http_only }}"
+          PHP_EXT: "{{ php_ext }}"
