@@ -25,6 +25,20 @@
       yum:
         name: docker-ce
         state: latest
+    - name: Create /etc/docker directory
+      file:
+        group: root
+        owner: root
+        mode: 0755
+        state: directory
+        path: "/etc/docker"
+    - name: Copy daemon.json config
+      copy:
+        group: root
+        owner: root
+        mode: 0644
+        src: "daemon.json"
+        dest: "/etc/docker/daemon.json"
     - name: Enable docker
       systemd:
         name: docker
