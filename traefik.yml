@@ -1,0 +1,54 @@
+- hosts: "{{ host }}"
+  remote_user: "{{ username }}"
+  become: yes
+  vars:
+    packages:
+      - git
+      - python-docker-py
+  tasks:
+    - name: Install utilities for docker
+      yum:
+        name: "{{ packages }}"
+        state: latest
+    - name: Create traefik config dir
+      file:
+        state: directory
+        path: "/srv/traefik"
+        owner: "{{ username }}"
+        group: "{{ username }}"
+        mode: 0755
+    - name: Create traefik acme file
+      file:
+        state: file
+        path: "/srv/traefik/acme.json"
+        owner: "{{ username }}"
+        group: "{{ username }}"
+        mode: 0600
+    - name: Copy traefik config
+      copy:
+        group: root
+        owner: root
+        mode: 0644
+        src: "traefik.toml"
+        dest: "/srv/traefik/traefik.toml"
+    - name: Modify email for acme requests
+      lineinfile:
+        dest: "/srv/traefik/traefik.toml"
+        regexp: "email = \"<EMAIL>\""
+        line: "email = \"{{ admin_email }}\""
+        state: present
+    - name: Start container
+      docker_container:
+        image: "traefik:1.6"
+        name: "traefik"
+        restart_policy: "unless-stopped"
+        state: started
+        volumes:
+          - "/var/run/docker.sock:/var/run/docker.sock:ro"
+          - "/srv/traefik/acme.json:/acme.json"
+          - "/srv/traefik/traefik.toml:/traefik.toml"
+        env:
+          PHP_EXT: "{{ php_ext | default('') }}"
+        labels: "{{ label_list }}"
+        networks:
+          - name: "{{ network_name | default('bridge') }}"
