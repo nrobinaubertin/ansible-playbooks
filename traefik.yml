@@ -19,7 +19,7 @@
         mode: 0755
     - name: Create traefik acme file
       file:
-        state: file
+        state: touch
         path: "/srv/traefik/acme.json"
         owner: "{{ username }}"
         group: "{{ username }}"
@@ -49,6 +49,8 @@
           - "/srv/traefik/traefik.toml:/traefik.toml"
         env:
           PHP_EXT: "{{ php_ext | default('') }}"
-        labels: "{{ label_list }}"
+        ports:
+          - 80:80
+          - 443:443
         networks:
           - name: "{{ network_name | default('bridge') }}"
