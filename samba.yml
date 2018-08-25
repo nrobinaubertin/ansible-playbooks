@@ -5,7 +5,6 @@
     packages:
       - git
       - python-docker-py
-    shared_dir: "/mnt"
   tasks:
     - name: Install utilities for docker
       yum:

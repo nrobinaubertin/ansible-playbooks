@@ -5,13 +5,18 @@
     packages:
       - git
       - python-docker-py
-    domains: "niels.xyz;www.niels.xyz"
-    certs_dir: "/certs"
   tasks:
     - name: Install utilities for docker
       yum:
         name: "{{ packages }}"
         state: latest
+    - name: Create certs_dir
+      file:
+        state: directory
+        path: "{{ certs_dir }}"
+        owner: "{{ username }}"
+        group: "{{ username }}"
+        mode: 0755
     - name: Clone dockerfiles repo
       git:
         repo: "https://github.com/nrobinaubertin/dockerfiles.git"
@@ -30,3 +35,7 @@
         state: started
         volumes:
           - "{{ certs_dir }}:/certs"
+        env:
+          DOMAINS: "{{ domains }}"
+          VIRTUAL_HOST: "{{ domains }}"
+          HTTP_ONLY: "true"
