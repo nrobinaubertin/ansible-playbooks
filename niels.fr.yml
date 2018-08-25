@@ -1,0 +1,25 @@
+- hosts: "{{ host }}"
+  remote_user: "{{ username }}"
+  become: yes
+  vars:
+    packages:
+      - git
+      - python-docker-py
+  tasks:
+    - name: Install utilities for docker
+      yum:
+        name: "{{ packages }}"
+        state: latest
+    - name: Clone niels.fr repo
+      git:
+        repo: "https://github.com/nrobinaubertin/nrobinaubertin.github.io.git"
+        # we don't need to keep the repository
+        dest: "{{ www_dir }}"
+    - import_tasks: "nginx-php.yml"
+      vars:
+        name: "www"
+        label_list:
+          "traefik.backend": "www"
+          "traefik.frontend.rule": "Host:www.niels.xyz,niels.xyz"
+          "traefik.port": "8080"
+          "traefik.enable": "true"

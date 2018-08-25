@@ -1,41 +1,30 @@
-- hosts: "{{ host }}"
-  remote_user: "{{ username }}"
-  become: yes
-  vars:
-    packages:
-      - git
-      - python-docker-py
-    certs_dir: "/certs"
-    www_dir: "/www"
-    php_ext: ""
-    name: "nginx-php"
-    virtual_host: ""
-    http_only: ""
-  tasks:
-    - name: Install utilities for docker
-      yum:
-        name: "{{ packages }}"
-        state: latest
-    - name: Clone dockerfiles repo
-      git:
-        repo: "https://github.com/nrobinaubertin/dockerfiles.git"
-        # we don't need to keep the repository
-        dest: "/tmp/git/dockerfiles"
-    - name: Create image
-      docker_image:
-        state: present
-        name: "{{ name }}"
-        path: "/tmp/git/dockerfiles/NOT_READY/nginx-php"
-    - name: Start container
-      docker_container:
-        image: "{{ name }}"
-        name: "{{ name }}"
-        restart_policy: "unless-stopped"
-        state: started
-        volumes:
-          - "{{ certs_dir }}:/certs"
-          - "{{ www_dir }}:/www"
-        env:
-          VIRTUAL_HOST: "{{ virtual_host }}"
-          HTTP_ONLY: "{{ http_only }}"
-          PHP_EXT: "{{ php_ext }}"
+- name: Create www_dir
+  file:
+    state: directory
+    path: "{{ www_dir }}"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: 0755
+- name: Clone dockerfiles repo
+  git:
+    repo: "https://github.com/nrobinaubertin/dockerfiles.git"
+    # we don't need to keep the repository
+    dest: "/tmp/git/dockerfiles"
+- name: Create image
+  docker_image:
+    state: present
+    name: "{{ name }}"
+    path: "/tmp/git/dockerfiles/NOT_READY/nginx-php"
+- name: Start container
+  docker_container:
+    image: "{{ name }}"
+    name: "{{ name }}"
+    restart_policy: "unless-stopped"
+    state: started
+    volumes:
+      - "{{ www_dir }}:/www"
+    env:
+      PHP_EXT: "{{ php_ext | default('') }}"
+    labels: "{{ label_list }}"
+    networks:
+      - name: "{{ network_name | default('bridge') }}"
