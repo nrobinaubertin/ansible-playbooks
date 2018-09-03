@@ -12,7 +12,7 @@
         state: latest
     - name: Clone niels.fr repo
       git:
-        repo: "https://github.com/nrobinaubertin/nrobinaubertin.github.io.git"
+        repo: "{{ www_repo }}"
         # we don't need to keep the repository
         dest: "{{ www_dir }}"
     - import_tasks: "nginx-php.yml"
@@ -20,6 +20,6 @@
         name: "www"
         label_list:
           "traefik.backend": "www"
-          "traefik.frontend.rule": "Host:www.niels.xyz,niels.xyz"
+          "traefik.frontend.rule": "Host:www.{{ domain }},{{ domain }}"
           "traefik.port": "8080"
           "traefik.enable": "true"
