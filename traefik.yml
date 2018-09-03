@@ -10,45 +10,41 @@
       yum:
         name: "{{ packages }}"
         state: latest
-    - name: Create traefik config dir
+    - name: Create traefik data dir
       file:
         state: directory
-        path: "/srv/traefik"
+        path: "{{ data_dir }}/traefik"
         owner: "{{ username }}"
         group: "{{ username }}"
         mode: 0755
     - name: Create traefik acme file
       file:
         state: touch
-        path: "/srv/traefik/acme.json"
+        path: "{{ data_dir }}/traefik/acme.json"
         owner: "{{ username }}"
         group: "{{ username }}"
         mode: 0600
-    - name: Copy traefik config
-      copy:
-        group: root
-        owner: root
-        mode: 0644
-        src: "traefik.toml"
-        dest: "/srv/traefik/traefik.toml"
-    - name: Modify email for acme requests
-      lineinfile:
-        dest: "/srv/traefik/traefik.toml"
-        regexp: "email = \"<EMAIL>\""
-        line: "email = \"{{ admin_email }}\""
+    - name: Clone dockerfiles repo
+      git:
+        repo: "https://github.com/nrobinaubertin/dockerfiles.git"
+        # we don't need to keep the repository
+        dest: "/tmp/git/dockerfiles"
+    - name: Create image
+      docker_image:
         state: present
+        name: "traefik"
+        path: "/tmp/git/dockerfiles/NOT_READY/traefik"
     - name: Start container
       docker_container:
-        image: "traefik:1.6"
+        image: "traefik"
         name: "traefik"
         restart_policy: "unless-stopped"
         state: started
+        env:
+          EMAIL: "{{ admin_email }}"
         volumes:
           - "/var/run/docker.sock:/var/run/docker.sock:ro"
-          - "/srv/traefik/acme.json:/acme.json"
-          - "/srv/traefik/traefik.toml:/traefik.toml"
-        env:
-          PHP_EXT: "{{ php_ext | default('') }}"
+          - "{{ data_dir }}/traefik/:/data"
         ports:
           - 80:80
           - 443:443
