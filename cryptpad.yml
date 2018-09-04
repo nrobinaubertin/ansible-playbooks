@@ -1,0 +1,44 @@
+- hosts: "{{ host }}"
+  remote_user: "{{ username }}"
+  become: yes
+  vars:
+    packages:
+      - git
+      - python-docker-py
+  tasks:
+    - name: Install utilities for docker
+      yum:
+        name: "{{ packages }}"
+        state: latest
+    - name: Create data_dir directory
+      file:
+        state: directory
+        path: "{{ data_dir }}/cryptpad/datastore"
+        owner: "{{ username }}"
+        group: "{{ username }}"
+        mode: 0755
+    - name: Clone dockerfiles repo
+      git:
+        repo: "https://github.com/nrobinaubertin/dockerfiles.git"
+        # we don't need to keep the repository
+        dest: "/tmp/git/dockerfiles"
+    - name: Create image
+      docker_image:
+        state: present
+        name: "cryptpad"
+        path: "/tmp/git/dockerfiles/cryptpad"
+    - name: Start container
+      docker_container:
+        image: "cryptpad"
+        name: "cryptpad"
+        restart_policy: "unless-stopped"
+        state: started
+        env:
+          DOMAIN: "{{ domain }}"
+        volumes:
+          - "{{ data_dir }}/cryptpad/datastore:/cryptpad/datastore"
+        labels:
+          "traefik.backend": "cryptpad"
+          "traefik.frontend.rule": "Host:cryptpad.{{ domain }}"
+          "traefik.port": "3000"
+          "traefik.enable": "true"
