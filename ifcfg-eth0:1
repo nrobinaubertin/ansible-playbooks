@@ -1,0 +1,8 @@
+# https://wiki.hetzner.de/index.php/Cloud_floating_IP_persistent/en
+BOOTPROTO=static
+DEVICE=eth0:1
+IPADDR=<STATIC_IP>
+PREFIX=32
+TYPE=Ethernet
+USERCTL=no
+ONBOOT=yes
