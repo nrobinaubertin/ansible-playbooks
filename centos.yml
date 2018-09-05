@@ -28,6 +28,20 @@
         name: yum-cron
         enabled: yes
         state: started
+    - name: Add swapfile
+      shell: "dd if=/dev/zero of=/swapfile bs=1M count=2048 && chmod 600 /swapfile && mkswap /swapfile && swapon /swapfile"
+    - name: Add swapfile to fstab
+      lineinfile:
+        dest: "/etc/fstab"
+        line: "/swapfile none swap defaults 0 0"
+        state: present
+    - name: Enable persistent logging
+      shell: "mkdir /var/log/journal && systemd-tmpfiles --create --prefix /var/log/journal"
+    - name: Restart systemd-journald
+      systemd:
+        name: systemd-journald
+        enabled: yes
+        state: restarted
     - name: Add main user
       user:
         name: "{{ username }}"
