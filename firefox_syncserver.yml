@@ -1,35 +1,12 @@
 - hosts: "{{ host }}"
   remote_user: "{{ username }}"
   become: yes
-  vars:
-    packages:
-      - git
-      - python-docker-py
   tasks:
-    - name: Install utilities for docker
-      yum:
-        name: "{{ packages }}"
-        state: latest
-    - name: Clone dockerfiles repo
-      git:
-        repo: "https://github.com/nrobinaubertin/dockerfiles.git"
-        # we don't need to keep the repository
-        dest: "/tmp/git/dockerfiles"
-    - name: Create image
-      docker_image:
-        state: present
-        name: "firefox_syncserver"
-        path: "/tmp/git/dockerfiles/firefox_syncserver"
-    - name: Start container
-      docker_container:
-        image: "firefox_syncserver"
-        name: "firefox_syncserver"
-        restart_policy: "unless-stopped"
-        state: started
-        env:
+    - import_tasks: "partials/container.yml"
+      vars:
+        container_name: "firefox_syncserver"
+        container_port: "5000"
+        container_path: "firefox_syncserver"
+        container_subdomain: "firefox-syncserver"
+        container_env:
           URL: "https://firefox-syncserver.{{ domain }}"
-        labels:
-          "traefik.backend": "firefox_syncserver"
-          "traefik.frontend.rule": "Host:firefox-syncserver.{{ domain }}"
-          "traefik.port": "5000"
-          "traefik.enable": "true"

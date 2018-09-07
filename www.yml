@@ -15,7 +15,7 @@
         repo: "{{ www_repo }}"
         # we don't need to keep the repository
         dest: "{{ www_dir }}"
-    - import_tasks: "nginx-php.yml"
+    - import_tasks: "partials/nginx-php.yml"
       vars:
         name: "www"
         label_list:

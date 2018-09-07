@@ -1,33 +1,9 @@
 - hosts: "{{ host }}"
   remote_user: "{{ username }}"
   become: yes
-  vars:
-    packages:
-      - git
-      - python-docker-py
   tasks:
-    - name: Install utilities for docker
-      yum:
-        name: "{{ packages }}"
-        state: latest
-    - name: Clone dockerfiles repo
-      git:
-        repo: "https://github.com/nrobinaubertin/dockerfiles.git"
-        # we don't need to keep the repository
-        dest: "/tmp/git/dockerfiles"
-    - name: Create image
-      docker_image:
-        state: present
-        name: "send"
-        path: "/tmp/git/dockerfiles/send"
-    - name: Start container
-      docker_container:
-        image: "send"
-        name: "send"
-        restart_policy: "unless-stopped"
-        state: started
-        labels:
-          "traefik.backend": "send"
-          "traefik.frontend.rule": "Host:send.{{ domain }}"
-          "traefik.port": "1443"
-          "traefik.enable": "true"
+    - import_tasks: "partials/container.yml"
+      vars:
+        container_name: "send"
+        container_port: "1443"
+        container_path: "send"
