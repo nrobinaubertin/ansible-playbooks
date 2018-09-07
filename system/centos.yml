@@ -4,6 +4,7 @@
     packages:
       - yum-cron
       - libselinux-python
+      - epel-release
       - rsync
   tasks:
     - name: Set the hostname
