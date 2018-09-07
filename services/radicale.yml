@@ -2,6 +2,14 @@
   remote_user: "{{ username }}"
   become: yes
   tasks:
+    - name: Install python utilities
+      yum:
+        name: "{{ packages }}"
+        state: latest
+      vars:
+        packages:
+          - python-passlib
+          - python2-bcrypt
     - name: Create config directory
       file:
         state: directory
@@ -9,6 +17,15 @@
         owner: "{{ username }}"
         group: "{{ username }}"
         mode: 0755
+    - name: Create the htpasswd file
+      htpasswd:
+        create: yes
+        crypt_scheme: "bcrypt"
+        group: "{{ username }}"
+        owner: "{{ username }}"
+        path: "{{ data_dir }}/radicale/config/htpasswd"
+        name: "{{ username }}"
+        password: "{{ app_password }}"
     - name: Create collections directory
       file:
         state: directory
