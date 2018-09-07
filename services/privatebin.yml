@@ -1,0 +1,9 @@
+- hosts: "{{ host }}"
+  remote_user: "{{ username }}"
+  become: yes
+  tasks:
+    - import_tasks: "../partials/container.yml"
+      vars:
+        container_name: "privatebin"
+        container_port: "8080"
+        container_path: "NOT_READY/privatebin"

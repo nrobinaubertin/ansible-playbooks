@@ -2,7 +2,7 @@
   remote_user: "{{ username }}"
   become: yes
   tasks:
-    - import_tasks: "partials/container.yml"
+    - import_tasks: "../partials/container.yml"
       vars:
         container_name: "alltube"
         container_port: "8080"

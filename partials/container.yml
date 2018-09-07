@@ -28,3 +28,4 @@
       "traefik.port": "{{ container_port }}"
       "traefik.enable": "true"
     env: "{{ container_env | default(omit) }}"
+    volumes: "{{ container_volumes | default(omit) }}"
