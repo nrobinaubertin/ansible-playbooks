@@ -8,7 +8,7 @@
         owner: root
         group: root
         mode: 0644
-    - name: Edit static ip in netork-script file
+    - name: Edit static ip in network-script file
       lineinfile:
         dest: "/etc/sysconfig/network-scripts/ifcfg-eth0:1"
         regexp: "IPADDR=<STATIC_IP>"
