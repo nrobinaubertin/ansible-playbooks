@@ -14,12 +14,13 @@
 - name: Create image
   docker_image:
     state: present
-    name: "{{ container_name }}"
+    name: "{{ container_name }}_{{ ansible_date_time['epoch'] }}"
     path: "/tmp/git/dockerfiles/{{ container_path }}"
 - name: Start container
   docker_container:
-    image: "{{ container_name }}"
+    image: "{{ container_name }}_{{ ansible_date_time['epoch'] }}"
     name: "{{ container_name }}"
+    recreate: yes
     restart_policy: "unless-stopped"
     state: started
     labels:
@@ -29,3 +30,4 @@
       "traefik.enable": "true"
     env: "{{ container_env | default(omit) }}"
     volumes: "{{ container_volumes | default(omit) }}"
+    ports: "{{ container_ports | default(omit) }}"
