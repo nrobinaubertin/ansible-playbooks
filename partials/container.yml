@@ -25,7 +25,7 @@
     state: started
     labels:
       "traefik.backend": "{{ container_name }}"
-      "traefik.frontend.rule": "Host:{{ container_subdomain | default(container_name) }}.{{ domain }}"
+      "traefik.frontend.rule": "Host:{{ container_domain | default(container_name + '.' + domain) }}"
       "traefik.port": "{{ container_port }}"
       "traefik.enable": "true"
     env: "{{ container_env | default(omit) }}"
