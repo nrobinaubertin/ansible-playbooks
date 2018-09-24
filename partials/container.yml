@@ -8,14 +8,13 @@
       - python-docker-py
 - name: Clone dockerfiles repo
   git:
-    repo: "https://github.com/nrobinaubertin/dockerfiles.git"
-    # we don't need to keep the repository
-    dest: "/tmp/git/dockerfiles"
+    repo: "{{ container_repo | default('https://github.com/nrobinaubertin/dockerfiles.git') }}"
+    dest: "/tmp/git/repo_{{ ansible_date_time['epoch'] }}"
 - name: Create image
   docker_image:
     state: present
     name: "{{ container_name }}_{{ ansible_date_time['epoch'] }}"
-    path: "/tmp/git/dockerfiles/{{ container_path }}"
+    path: "/tmp/git/repo_{{ ansible_date_time['epoch'] }}/{{ container_path }}"
 - name: Start container
   docker_container:
     image: "{{ container_name }}_{{ ansible_date_time['epoch'] }}"
