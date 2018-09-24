@@ -25,7 +25,7 @@
         owner: "{{ username }}"
         path: "{{ data_dir }}/radicale/config/htpasswd"
         name: "{{ username }}"
-        password: "{{ app_password }}"
+        password: "{{ password }}"
     - name: Create collections directory
       file:
         state: directory
@@ -37,7 +37,7 @@
       vars:
         container_name: "radicale"
         container_port: "5232"
-        container_path: "NOT_READY/radicale"
+        container_path: "radicale"
         container_volumes:
           - "{{ data_dir }}/radicale/config:/radicale/config"
           - "{{ data_dir }}/radicale/collections:/radicale/collections"
