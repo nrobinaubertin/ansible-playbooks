@@ -13,6 +13,6 @@
       vars:
         container_name: "privatebin"
         container_port: "8080"
-        container_path: "NOT_READY/privatebin"
+        container_path: "privatebin"
         container_volumes:
           - "{{ data_dir }}/privatebin/data:/privatebin/data"
