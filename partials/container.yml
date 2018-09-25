@@ -30,3 +30,4 @@
     env: "{{ container_env | default(omit) }}"
     volumes: "{{ container_volumes | default(omit) }}"
     ports: "{{ container_ports | default(omit) }}"
+    pid_mode: "{{ container_pid_mode | default(omit) }}"
