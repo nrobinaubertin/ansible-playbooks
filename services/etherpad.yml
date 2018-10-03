@@ -13,6 +13,6 @@
       vars:
         container_name: "etherpad"
         container_port: "9001"
-        container_path: "NOT_READY/etherpad"
+        container_path: "etherpad"
         container_volumes:
           - "{{ data_dir }}/etherpad/data:/etherpad/data"

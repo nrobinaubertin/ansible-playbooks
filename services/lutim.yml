@@ -9,10 +9,10 @@
         owner: "{{ username }}"
         group: "{{ username }}"
         mode: 0755
-    - name: Create collections directory
+    - name: Create files directory
       file:
         state: directory
-        path: "{{ data_dir }}/lutim/collections"
+        path: "{{ data_dir }}/lutim/files"
         owner: "{{ username }}"
         group: "{{ username }}"
         mode: 0755
@@ -20,10 +20,10 @@
       vars:
         container_name: "lutim"
         container_port: "8080"
-        container_path: "NOT_READY/lutim"
+        container_path: "lutim"
         container_env:
           DOMAIN: "{{ domain }}"
           CONTACT: "{{ admin_email }}"
         container_volumes:
           - "{{ data_dir }}/lutim/data:/lutim/data"
-          - "{{ data_dir }}/lutim/collections:/lutim/collections"
+          - "{{ data_dir }}/lutim/files:/lutim/files"
