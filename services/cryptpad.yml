@@ -16,5 +16,7 @@
         container_path: "cryptpad"
         container_env:
           DOMAIN: "{{ domain }}"
+          UID: "{{ ansible_env['SUDO_UID'] }}"
+          GID: "{{ ansible_env['SUDO_GID'] }}"
         container_volumes:
           - "{{ data_dir }}/cryptpad/datastore:/cryptpad/datastore"

@@ -18,5 +18,7 @@
         container_env:
           DOMAIN: "{{ domain }}"
           CONTACT: "{{ admin_email }}"
+          UID: "{{ ansible_env['SUDO_UID'] }}"
+          GID: "{{ ansible_env['SUDO_GID'] }}"
         container_volumes:
           - "{{ data_dir }}/{{ wordpress_domain }}/wp-content:/wordpress/wp-content"

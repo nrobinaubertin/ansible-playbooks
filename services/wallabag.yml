@@ -16,5 +16,7 @@
         container_path: "wallabag"
         container_env:
           DOMAIN: "https://wallabag.{{ domain }}"
+          UID: "{{ ansible_env['SUDO_UID'] }}"
+          GID: "{{ ansible_env['SUDO_GID'] }}"
         container_volumes:
           - "{{ data_dir }}/wallabag/data:/wallabag/data"

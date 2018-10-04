@@ -16,6 +16,8 @@
         container_path: "NOT_READY/nginx-php"
         container_env:
           PHP_EXT: "{{ php_ext | default('') }}"
+          UID: "{{ ansible_env['SUDO_UID'] }}"
+          GID: "{{ ansible_env['SUDO_GID'] }}"
         container_domain: "www.{{ domain }},{{ domain }}"
         container_volumes:
           - "{{ data_dir }}/www:/www"

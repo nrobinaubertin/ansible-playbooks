@@ -7,3 +7,6 @@
         container_name: "send"
         container_port: "1443"
         container_path: "send"
+        container_env:
+          UID: "{{ ansible_env['SUDO_UID'] }}"
+          GID: "{{ ansible_env['SUDO_GID'] }}"

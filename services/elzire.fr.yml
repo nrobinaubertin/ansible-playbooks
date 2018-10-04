@@ -18,3 +18,6 @@
         container_domain: "elzire.fr,www.elzire.fr"
         container_volumes:
           - "{{ data_dir }}/elzire.fr/data:/elzire/data"
+        container_env:
+          UID: "{{ ansible_env['SUDO_UID'] }}"
+          GID: "{{ ansible_env['SUDO_GID'] }}"

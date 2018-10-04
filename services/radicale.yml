@@ -41,3 +41,6 @@
         container_volumes:
           - "{{ data_dir }}/radicale/config:/radicale/config"
           - "{{ data_dir }}/radicale/collections:/radicale/collections"
+        container_env:
+          UID: "{{ ansible_env['SUDO_UID'] }}"
+          GID: "{{ ansible_env['SUDO_GID'] }}"

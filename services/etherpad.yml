@@ -16,3 +16,6 @@
         container_path: "etherpad"
         container_volumes:
           - "{{ data_dir }}/etherpad/data:/etherpad/data"
+        container_env:
+          UID: "{{ ansible_env['SUDO_UID'] }}"
+          GID: "{{ ansible_env['SUDO_GID'] }}"

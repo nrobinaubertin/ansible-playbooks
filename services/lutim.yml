@@ -24,6 +24,8 @@
         container_env:
           DOMAIN: "{{ domain }}"
           CONTACT: "{{ admin_email }}"
+          UID: "{{ ansible_env['SUDO_UID'] }}"
+          GID: "{{ ansible_env['SUDO_GID'] }}"
         container_volumes:
           - "{{ data_dir }}/lutim/data:/lutim/data"
           - "{{ data_dir }}/lutim/files:/lutim/files"
