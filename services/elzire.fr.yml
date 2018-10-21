@@ -12,7 +12,7 @@
     - import_tasks: "../partials/container.yml"
       vars:
         container_repo: "https://github.com/nrobinaubertin/elzire.fr.git"
-        container_path: "docker/autonomous"
+        container_path: "docker/standalone"
         container_name: "elzire.fr"
         container_port: "8080"
         container_domain: "elzire.fr,www.elzire.fr"
