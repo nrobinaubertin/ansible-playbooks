@@ -1,0 +1,10 @@
+- hosts: "{{ host }}"
+  remote_user: "{{ username }}"
+  become: yes
+  tasks:
+    - name: Remove temporary git repos
+      shell: "rm -rf /tmp/git/*"
+    - name: Clean yum
+      shell: "yum clean all"
+    - name: Clean docker
+      shell: "docker system prune --all --force"
