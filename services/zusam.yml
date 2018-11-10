@@ -20,5 +20,5 @@
         container_env:
           UID: "{{ ansible_env['SUDO_UID'] }}"
           GID: "{{ ansible_env['SUDO_GID'] }}"
-          INSTANCE_TYPE: "demo"
+          INSTANCE_TYPE: "default"
           DOMAIN: "zusam.niels.fr"
