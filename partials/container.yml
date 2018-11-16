@@ -9,12 +9,13 @@
 - name: Clone dockerfiles repo
   git:
     repo: "{{ container_repo | default('https://github.com/nrobinaubertin/dockerfiles.git') }}"
-    dest: "/tmp/git/repo_{{ ansible_date_time['epoch'] }}"
+    dest: "/tmp/git/{{container_name}}_{{ ansible_date_time['epoch'] }}"
+    depth: 1
 - name: Create image
   docker_image:
     state: present
     name: "{{ container_name }}:{{ ansible_date_time['epoch'] }}"
-    path: "/tmp/git/repo_{{ ansible_date_time['epoch'] }}/{{ container_path }}"
+    path: "/tmp/git/{{container_name}}_{{ ansible_date_time['epoch'] }}/{{ container_path }}"
 - name: Start container
   docker_container:
     image: "{{ container_name }}:{{ ansible_date_time['epoch'] }}"
@@ -27,7 +28,12 @@
       "traefik.frontend.rule": "Host:{{ container_domain | default(container_name + '.' + domain) }}"
       "traefik.port": "{{ container_port }}"
       "traefik.enable": "true"
+      "traefik.frontend.auth.basic": "{{ container_auth | default(omit) }}"
     env: "{{ container_env | default(omit) }}"
     volumes: "{{ container_volumes | default(omit) }}"
     ports: "{{ container_ports | default(omit) }}"
     pid_mode: "{{ container_pid_mode | default(omit) }}"
+- name: Remove repo
+  file:
+    path: "/tmp/git/{{container_name}}_{{ ansible_date_time['epoch'] }}"
+    state: absent
