@@ -7,3 +7,4 @@
         container_name: "alltube"
         container_port: "8080"
         container_path: "alltube"
+        container_traefik: true

@@ -15,6 +15,7 @@
         container_path: "docker/standalone"
         container_name: "elzire.fr"
         container_port: "8080"
+        container_traefik: true
         container_domain: "elzire.fr,www.elzire.fr"
         container_volumes:
           - "{{ data_dir }}/elzire.fr/data:/elzire/data"

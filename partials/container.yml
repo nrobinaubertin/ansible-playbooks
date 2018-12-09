@@ -26,8 +26,8 @@
     labels:
       "traefik.backend": "{{ container_name }}"
       "traefik.frontend.rule": "Host:{{ container_domain | default(container_name + '.' + domain) }}"
-      "traefik.port": "{{ container_port }}"
-      "traefik.enable": "true"
+      "traefik.port": "{{ container_port | default(omit) }}"
+      "traefik.enable": "{{ container_traefik | default(omit) }}"
       "traefik.frontend.auth.basic": "{{ container_auth | default(omit) }}"
     env: "{{ container_env | default(omit) }}"
     volumes: "{{ container_volumes | default(omit) }}"
