@@ -12,14 +12,17 @@
     - import_tasks: "../partials/container.yml"
       vars:
         container_name: "prosody"
-        container_port: "5280"
         container_path: "NOT_READY/prosody"
         container_env:
+          UID: "{{ ansible_env['SUDO_UID'] }}"
+          GID: "{{ ansible_env['SUDO_GID'] }}"
           DOMAIN: "{{ domain }}"
-          SUBDOMAIN: "prosody"
           ADMIN: "{{ admin_email }}"
         container_volumes:
-          - "{{ data_dir }}/prosody/data:/prosody/data"
+          - "{{ data_dir }}/prosody/data:/data"
         container_ports:
           - "5000:5000"
           - "5222:5222"
+          - "5280:5280"
+          - "5281:5281"
+          - "5269:5269"
