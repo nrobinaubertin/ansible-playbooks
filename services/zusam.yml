@@ -15,7 +15,7 @@
         container_path: ""
         container_name: "zusam"
         container_port: "8080"
-        container_traefik: true
+        container_traefik: "true"
         container_volumes:
           - "{{ data_dir }}/zusam/data:/zusam/data"
         container_env:
