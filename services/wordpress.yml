@@ -15,7 +15,7 @@
         container_port: "8080"
         container_path: "NOT_READY/wordpress"
         container_domain: "{{ wordpress_domain }}"
-        container_traefik: true
+        container_traefik: "true"
         container_env:
           DOMAIN: "{{ domain }}"
           CONTACT: "{{ admin_email }}"

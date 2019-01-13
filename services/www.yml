@@ -14,7 +14,7 @@
         container_name: "www"
         container_port: "8080"
         container_path: "NOT_READY/nginx-php"
-        container_traefik: true
+        container_traefik: "true"
         container_env:
           PHP_EXT: "{{ php_ext | default('') }}"
           UID: "{{ ansible_env['SUDO_UID'] }}"

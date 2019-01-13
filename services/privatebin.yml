@@ -14,7 +14,7 @@
         container_name: "privatebin"
         container_port: "8080"
         container_path: "privatebin"
-        container_traefik: true
+        container_traefik: "true"
         container_volumes:
           - "{{ data_dir }}/privatebin/data:/privatebin/data"
         container_env:

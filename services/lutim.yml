@@ -21,7 +21,7 @@
         container_name: "lutim"
         container_port: "8080"
         container_path: "lutim"
-        container_traefik: true
+        container_traefik: "true"
         container_env:
           DOMAIN: "{{ domain }}"
           CONTACT: "{{ admin_email }}"

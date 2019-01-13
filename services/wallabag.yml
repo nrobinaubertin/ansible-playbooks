@@ -14,7 +14,7 @@
         container_name: "wallabag"
         container_port: "8080"
         container_path: "wallabag"
-        container_traefik: true
+        container_traefik: "true"
         container_env:
           DOMAIN: "https://wallabag.{{ domain }}"
           UID: "{{ ansible_env['SUDO_UID'] }}"

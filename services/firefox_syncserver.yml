@@ -8,7 +8,7 @@
         container_port: "5000"
         container_path: "firefox_syncserver"
         container_domain: "firefox-syncserver.{{ domain }}"
-        container_traefik: true
+        container_traefik: "true"
         container_env:
           URL: "https://firefox-syncserver.{{ domain }}"
           UID: "{{ ansible_env['SUDO_UID'] }}"
