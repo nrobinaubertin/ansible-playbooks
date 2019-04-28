@@ -33,6 +33,7 @@
     volumes: "{{ container_volumes | default(omit) }}"
     ports: "{{ container_ports | default(omit) }}"
     pid_mode: "{{ container_pid_mode | default(omit) }}"
+    networks: "{{ container_networks | default(omit) }}"
 - name: Remove repo
   file:
     path: "/tmp/git/{{container_name}}_{{ ansible_date_time['epoch'] }}"
