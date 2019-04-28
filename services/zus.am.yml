@@ -24,3 +24,4 @@
           GID: "{{ ansible_env['SUDO_GID'] }}"
           INSTANCE_TYPE: "default"
           DOMAIN: "zus.am"
+          LANG: "fr"
