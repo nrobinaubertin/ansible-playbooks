@@ -23,6 +23,7 @@
           - 80:80
           - 443:443
         container_path: "NOT_READY/traefik"
+        container_repo: "https://github.com/nrobinaubertin/dockerfiles.git"
         container_traefik: "false"
         container_env:
           UID: "{{ ansible_env['SUDO_UID'] }}"

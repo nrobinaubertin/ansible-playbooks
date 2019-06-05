@@ -6,17 +6,19 @@
     packages:
       - git
       - python-docker-py
-- name: Clone dockerfiles repo
+- name: Clone dockerfile repository
   git:
     repo: "{{ container_repo | default('https://github.com/nrobinaubertin/dockerfiles.git') }}"
     dest: "/tmp/git/{{container_name}}_{{ ansible_date_time['epoch'] }}"
     depth: 1
-- name: Create image
+  when: "container_repo is defined"
+- name: Create image from path
   docker_image:
     state: present
     name: "{{ container_name }}:{{ ansible_date_time['epoch'] }}"
     path: "/tmp/git/{{container_name}}_{{ ansible_date_time['epoch'] }}/{{ container_path }}"
-- name: Start container
+  when: "container_path is defined"
+- name: Start container from image
   docker_container:
     image: "{{ container_name }}:{{ ansible_date_time['epoch'] }}"
     name: "{{ container_name }}"
@@ -34,7 +36,28 @@
     ports: "{{ container_ports | default(omit) }}"
     pid_mode: "{{ container_pid_mode | default(omit) }}"
     networks: "{{ container_networks | default(omit) }}"
+  when: "container_path is defined"
+- name: Start container from hub tag
+  docker_container:
+    image: "{{ container_tag }}"
+    name: "{{ container_name }}"
+    recreate: yes
+    restart_policy: "unless-stopped"
+    state: started
+    labels:
+      "traefik.backend": "{{ container_name }}"
+      "traefik.frontend.rule": "Host:{{ container_domain | default(container_name + '.' + domain) }}"
+      "traefik.port": "{{ container_port | default(omit) }}"
+      "traefik.enable": "{{ container_traefik | default(omit) }}"
+      "traefik.frontend.auth.basic": "{{ container_auth | default(omit) }}"
+    env: "{{ container_env | default(omit) }}"
+    volumes: "{{ container_volumes | default(omit) }}"
+    ports: "{{ container_ports | default(omit) }}"
+    pid_mode: "{{ container_pid_mode | default(omit) }}"
+    networks: "{{ container_networks | default(omit) }}"
+  when: "container_tag is defined"
 - name: Remove repo
   file:
     path: "/tmp/git/{{container_name}}_{{ ansible_date_time['epoch'] }}"
     state: absent
+  when: "container_repo is defined"

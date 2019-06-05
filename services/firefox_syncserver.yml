@@ -9,6 +9,7 @@
         container_path: "firefox_syncserver"
         container_domain: "firefox-syncserver.{{ domain }}"
         container_traefik: "true"
+        container_repo: "https://github.com/nrobinaubertin/dockerfiles.git"
         container_env:
           URL: "https://firefox-syncserver.{{ domain }}"
           UID: "{{ ansible_env['SUDO_UID'] }}"

@@ -15,6 +15,7 @@
         container_port: "8080"
         container_path: "privatebin"
         container_traefik: "true"
+        container_repo: "https://github.com/nrobinaubertin/dockerfiles.git"
         container_volumes:
           - "{{ data_dir }}/privatebin/data:/privatebin/data"
         container_env:

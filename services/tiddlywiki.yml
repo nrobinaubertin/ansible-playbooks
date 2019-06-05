@@ -16,6 +16,7 @@
         container_path: "NOT_READY/tiddlywiki"
         container_auth: "{{ username + ':' + auth_password }}"
         container_traefik: "true"
+        container_repo: "https://github.com/nrobinaubertin/dockerfiles.git"
         container_volumes:
           - "{{ data_dir }}/tiddlywiki/data:/data"
         container_env:

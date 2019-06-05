@@ -13,6 +13,7 @@
       vars:
         container_name: "prosody"
         container_path: "NOT_READY/prosody"
+        container_repo: "https://github.com/nrobinaubertin/dockerfiles.git"
         container_env:
           UID: "{{ ansible_env['SUDO_UID'] }}"
           GID: "{{ ansible_env['SUDO_GID'] }}"

@@ -12,13 +12,13 @@
     - import_tasks: "../partials/container.yml"
       vars:
         container_name: "www"
-        container_port: "8080"
-        container_path: "NOT_READY/nginx-php"
+        container_port: "80"
+        container_tag: "nginx:mainline-alpine"
         container_traefik: "true"
         container_env:
-          PHP_EXT: "{{ php_ext | default('') }}"
           UID: "{{ ansible_env['SUDO_UID'] }}"
           GID: "{{ ansible_env['SUDO_GID'] }}"
         container_domain: "www.{{ domain }},{{ domain }}"
         container_volumes:
-          - "{{ data_dir }}/www:/www"
+          - "{{ data_dir }}/www:/usr/share/nginx/html:ro"
+          - "{{ data_dir }}/www/nginx.conf:/etc/nginx/nginx.conf:ro"

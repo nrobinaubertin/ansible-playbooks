@@ -15,8 +15,9 @@
         container_port: "8080"
         container_path: "kanboard"
         container_traefik: "true"
+        container_repo: "https://github.com/nrobinaubertin/dockerfiles.git"
         container_env:
           UID: "{{ ansible_env['SUDO_UID'] }}"
           GID: "{{ ansible_env['SUDO_GID'] }}"
         container_volumes:
-          - "{{ data_dir }}/kanboard/data:/data"
+          - "{{ data_dir }}/kanboard/data:/kanboard/data"

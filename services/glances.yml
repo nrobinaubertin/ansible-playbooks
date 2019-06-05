@@ -9,6 +9,7 @@
         container_path: "NOT_READY/glances"
         container_pid_mode: "host"
         container_traefik: "true"
+        container_repo: "https://github.com/nrobinaubertin/dockerfiles.git"
         container_env:
           CACHED_TIME: 30
           GLANCES_OPT: "--disable-process"
