@@ -18,9 +18,13 @@
           UID: "{{ ansible_env['SUDO_UID'] }}"
           GID: "{{ ansible_env['SUDO_GID'] }}"
           DOMAIN: "{{ domain }}"
-          ADMIN: "{{ admin_email }}"
+          ADMIN_EMAIL: "{{ xmpp_admin_email }}"
+          SSL_CERT: "/cert.pem"
+          SSL_KEY: "/key.pem"
         container_volumes:
           - "{{ data_dir }}/prosody/data:/data"
+          - "{{ data_dir }}/traefik/certs/certs/{{ domain }}.crt:/cert.pem:ro"
+          - "{{ data_dir }}/traefik/certs/private/{{ domain }}.key:/key.pem:ro"
         container_ports:
           - "5000:5000"
           - "5222:5222"
