@@ -16,7 +16,10 @@
   docker_image:
     state: present
     name: "{{ container_name }}:{{ ansible_date_time['epoch'] }}"
-    path: "/tmp/git/{{container_name}}_{{ ansible_date_time['epoch'] }}/{{ container_path }}"
+    build:
+      path: "/tmp/git/{{container_name}}_{{ ansible_date_time['epoch'] }}/{{ container_path }}"
+      pull: yes
+    source: "build"
   when: "container_path is defined"
 - name: Start container from image
   docker_container:
