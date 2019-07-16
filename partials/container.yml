@@ -11,6 +11,7 @@
     repo: "{{ container_repo | default('https://github.com/nrobinaubertin/dockerfiles.git') }}"
     dest: "/tmp/git/{{container_name}}_{{ ansible_date_time['epoch'] }}"
     depth: 1
+    version: "{{ container_repo_branch | default('master') }}"
   when: "container_repo is defined"
 - name: Create image from path
   docker_image:
