@@ -11,7 +11,7 @@
         container_traefik: "true"
         container_repo: "https://github.com/nrobinaubertin/dockerfiles.git"
         container_env:
-          CACHED_TIME: 30
+          CACHED_TIME: "30"
           GLANCES_OPT: "--disable-process"
         container_volumes:
           - "/var/run/docker.sock:/var/run/docker.sock:ro"
