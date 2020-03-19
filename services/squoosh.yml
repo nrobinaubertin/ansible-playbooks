@@ -1,0 +1,14 @@
+- hosts: "{{ host }}"
+  remote_user: "{{ username }}"
+  become: yes
+  tasks:
+    - import_tasks: "../partials/container.yml"
+      vars:
+        container_name: "squoosh"
+        container_port: "8080"
+        container_path: "NOT_READY/squoosh"
+        container_traefik: "true"
+        container_repo: "https://github.com/nrobinaubertin/dockerfiles.git"
+        container_env:
+          UID: "{{ ansible_env['SUDO_UID'] }}"
+          GID: "{{ ansible_env['SUDO_GID'] }}"
