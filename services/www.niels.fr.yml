@@ -18,7 +18,7 @@
         container_env:
           UID: "{{ ansible_env['SUDO_UID'] }}"
           GID: "{{ ansible_env['SUDO_GID'] }}"
-        container_domain: "{{ domain }},www.{{ domain }}"
+        container_domain: "niels.fr,www.niels.fr"
         container_volumes:
           - "{{ data_dir }}/www:/usr/share/nginx/html:ro"
           - "{{ data_dir }}/www/nginx.conf:/etc/nginx/nginx.conf:ro"

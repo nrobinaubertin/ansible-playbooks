@@ -1,0 +1,24 @@
+- hosts: "{{ host }}"
+  remote_user: "{{ username }}"
+  become: yes
+  tasks:
+    - name: Create data directory
+      file:
+        state: directory
+        path: "{{ data_dir }}/lan"
+        owner: "{{ username }}"
+        group: "{{ username }}"
+        mode: 0755
+    - import_tasks: "../partials/container.yml"
+      vars:
+        container_name: "lan"
+        container_port: "80"
+        container_tag: "nginx:mainline-alpine"
+        container_traefik: "true"
+        container_env:
+          UID: "{{ ansible_env['SUDO_UID'] }}"
+          GID: "{{ ansible_env['SUDO_GID'] }}"
+        container_domain: "lan.niels.fr"
+        container_volumes:
+          - "{{ data_dir }}/lan:/usr/share/nginx/html:ro"
+          - "{{ data_dir }}/lan/nginx.conf:/etc/nginx/nginx.conf:ro"
