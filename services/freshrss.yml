@@ -13,7 +13,7 @@
       vars:
         container_name: "freshrss"
         container_port: "8080"
-        container_path: "NOT_READY/freshrss"
+        container_path: "freshrss"
         container_traefik: "true"
         container_repo: "https://github.com/nrobinaubertin/dockerfiles.git"
         container_volumes:

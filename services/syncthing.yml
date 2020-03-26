@@ -13,7 +13,7 @@
       vars:
         container_name: "syncthing"
         container_port: "8384"
-        container_path: "NOT_READY/syncthing"
+        container_path: "syncthing"
         container_traefik: "true"
         container_repo: "https://github.com/nrobinaubertin/dockerfiles.git"
         container_env:
