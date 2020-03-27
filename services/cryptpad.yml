@@ -17,7 +17,7 @@
         container_traefik: "true"
         container_repo: "https://github.com/nrobinaubertin/dockerfiles.git"
         container_env:
-          DOMAIN: "{{ domain }}"
+          DOMAIN: "https://cryptpad.{{ domain }}"
           UID: "{{ ansible_env['SUDO_UID'] }}"
           GID: "{{ ansible_env['SUDO_GID'] }}"
         container_volumes:
