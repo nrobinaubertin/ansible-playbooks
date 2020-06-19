@@ -1,0 +1,35 @@
+- hosts: "{{ host }}"
+  remote_user: "{{ username }}"
+  become: yes
+  vars:
+    pure_certdir: "/certs"
+  tasks:
+    - name: Create data directory
+      file:
+        state: directory
+        path: "{{ data_dir }}/pure-ftpd"
+        owner: "{{ username }}"
+        group: "{{ username }}"
+        mode: 0755
+    - import_tasks: "../partials/container.yml"
+      vars:
+        container_name: "pure-ftpd"
+        container_path: "NOT_READY/pure-ftpd"
+        container_repo: "https://github.com/nrobinaubertin/dockerfiles.git"
+        container_hostname: "{{ domain }}"
+        container_env:
+          UID: "{{ ansible_env['SUDO_UID'] }}"
+          GID: "{{ ansible_env['SUDO_GID'] }}"
+          DOMAIN: "{{ domain }}"
+          PURE_CERTFILE: "{{ pure_certdir }}/cert.pem"
+          PURE_KEYFILE: "{{ pure_certdir }}/key.pem"
+          PURE_PASSIVIP: "{{ domain }}"
+          PURE_QUOTA: "10000:10240"
+        container_volumes:
+          - "{{ data_dir }}:/data"
+          - "{{ data_dir }}/pure-ftpd:/config"
+          - "{{ data_dir }}/traefik/certs/certs/{{ domain }}.crt:{{ pure_certdir }}/cert.pem:ro"
+          - "{{ data_dir }}/traefik/certs/private/{{ domain }}.key:{{ pure_certdir }}/key.pem:ro"
+        container_ports:
+          - "21:2121"
+          - "50000-50009:50000-50009"
