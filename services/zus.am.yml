@@ -23,3 +23,6 @@
         container_env:
           DOMAIN: "zus.am"
           LANG: "fr"
+          ALLOW_EMAIL: "true"
+          ALLOW_IMAGE_UPLOAD: "true"
+          ALLOW_VIDEO_UPLOAD: "true"
