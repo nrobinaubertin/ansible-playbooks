@@ -13,7 +13,7 @@
       vars:
         container_name: "{{ wordpress_domain }}"
         container_port: "8080"
-        container_path: "NOT_READY/wordpress"
+        container_path: "NOT_STABLE/wordpress"
         container_domain: "{{ wordpress_domain }}"
         container_traefik: "true"
         container_repo: "https://github.com/nrobinaubertin/dockerfiles.git"

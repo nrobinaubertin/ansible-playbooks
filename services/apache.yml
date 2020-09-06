@@ -5,20 +5,19 @@
     - name: Create data directory
       file:
         state: directory
-        path: "{{ data_dir }}/tiddlywiki/data"
+        path: "{{ data_dir }}/{{ apache_domain }}/public"
         owner: "{{ username }}"
         group: "{{ username }}"
         mode: 0755
     - import_tasks: "../partials/container.yml"
       vars:
-        container_name: "tiddlywiki"
-        container_port: "8080"
-        container_path: "NOT_STABLE/tiddlywiki"
-        container_auth: "{{ username + ':' + auth_password }}"
+        container_name: "{{ apache_domain }}"
+        container_domain: "{{ apache_domain }}"
+        container_port: "80"
+        container_tag: "httpd:2.4"
         container_traefik: "true"
-        container_repo: "https://github.com/nrobinaubertin/dockerfiles.git"
-        container_volumes:
-          - "{{ data_dir }}/tiddlywiki/data:/data"
         container_env:
           UID: "{{ ansible_env['SUDO_UID'] }}"
           GID: "{{ ansible_env['SUDO_GID'] }}"
+        container_volumes:
+          - "{{ data_dir }}/{{ apache_domain }}:/usr/local/apache2/htdocs/:ro"

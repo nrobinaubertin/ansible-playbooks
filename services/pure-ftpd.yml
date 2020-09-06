@@ -14,7 +14,7 @@
     - import_tasks: "../partials/container.yml"
       vars:
         container_name: "pure-ftpd"
-        container_path: "NOT_READY/pure-ftpd"
+        container_path: "NOT_STABLE/pure-ftpd"
         container_repo: "https://github.com/nrobinaubertin/dockerfiles.git"
         container_hostname: "{{ domain }}"
         container_env:

@@ -22,7 +22,7 @@
         container_ports:
           - 80:80
           - 443:443
-        container_path: "NOT_READY/traefik"
+        container_path: "NOT_STABLE/traefik"
         container_repo: "https://github.com/nrobinaubertin/dockerfiles.git"
         container_traefik: "false"
         container_env:
