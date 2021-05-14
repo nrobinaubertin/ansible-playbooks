@@ -11,14 +11,11 @@
         mode: 0755
     - import_tasks: "../partials/container.yml"
       vars:
-        container_repo: "https://github.com/nrobinaubertin/elzire.fr.git"
-        container_path: "docker/standalone"
+        container_repo: "https://github.com/nrobinaubertin/custom-cms.git"
         container_name: "elzire.fr"
         container_port: "8080"
+        container_path: ""
         container_traefik: "true"
         container_domain: "elzire.fr,www.elzire.fr"
         container_volumes:
           - "{{ data_dir }}/elzire.fr/data:/elzire/data"
-        container_env:
-          UID: "{{ ansible_env['SUDO_UID'] }}"
-          GID: "{{ ansible_env['SUDO_GID'] }}"

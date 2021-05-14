@@ -15,8 +15,6 @@
         container_path: "NOT_STABLE/prosody"
         container_repo: "https://github.com/nrobinaubertin/dockerfiles.git"
         container_env:
-          UID: "{{ ansible_env['SUDO_UID'] }}"
-          GID: "{{ ansible_env['SUDO_GID'] }}"
           DOMAIN: "{{ domain }}"
           ADMIN_EMAIL: "{{ xmpp_admin_email }}"
           SSL_CERT: "/cert.pem"
@@ -28,6 +26,8 @@
         container_ports:
           - "5000:5000"
           - "5222:5222"
-          - "5280:5280"
-          - "5281:5281"
           - "5269:5269"
+          - "5280-5281:5280-5281"
+          - "3478-3479:3478-3479"
+          - "5349-5350:5349-5350"
+          - "49152-49162:49152-49162"

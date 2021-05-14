@@ -12,7 +12,7 @@
     - import_tasks: "../partials/container.yml"
       vars:
         container_repo: "https://github.com/zusam/zusam.git"
-        container_repo_branch: "0.4.2"
+        container_repo_branch: "0.4.5"
         container_path: ""
         container_name: "zus.am"
         container_port: "8080"
