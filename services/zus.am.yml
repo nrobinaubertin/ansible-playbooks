@@ -26,3 +26,4 @@
           ALLOW_EMAIL: "true"
           ALLOW_IMAGE_UPLOAD: "true"
           ALLOW_VIDEO_UPLOAD: "true"
+          ALLOW_PDF_UPLOAD: "true"

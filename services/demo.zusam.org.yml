@@ -1,0 +1,34 @@
+- hosts: "{{ host }}"
+  remote_user: "{{ username }}"
+  become: yes
+  tasks:
+    - name: Clone repository
+      git:
+        repo: "https://github.com/zusam/zusam.git"
+        dest: "/tmp/git/zusam_{{ ansible_date_time['epoch'] }}"
+        depth: 1
+        version: "master"
+    - name: Create image
+      docker_image:
+        state: present
+        name: "zusam"
+        build:
+          path: "/tmp/git/zusam_{{ ansible_date_time['epoch'] }}/"
+          pull: yes
+        source: "build"
+    - import_tasks: "../partials/container.yml"
+      vars:
+        container_repo: "https://github.com/zusam/demo.git"
+        container_pull_base_image: false
+        container_path: ""
+        container_name: "demo.zusam.org"
+        container_port: "8080"
+        container_traefik: "true"
+        container_domain: "demo.zusam.org"
+        container_env:
+          DOMAIN: "demo.zusam.org"
+          LANG: "en"
+          ALLOW_EMAIL: "false"
+          ALLOW_IMAGE_UPLOAD: "true"
+          ALLOW_VIDEO_UPLOAD: "true"
+          ALLOW_PDF_UPLOAD: "true"

@@ -19,7 +19,7 @@
     name: "{{ container_name }}:{{ ansible_date_time['epoch'] }}"
     build:
       path: "/tmp/git/{{container_name}}_{{ ansible_date_time['epoch'] }}/{{ container_path }}"
-      pull: yes
+      pull: "{{ container_pull_base_image | default(true) }}"
     source: "build"
   when: "container_path is defined"
 - name: Start container from image
