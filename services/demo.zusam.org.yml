@@ -12,6 +12,7 @@
       docker_image:
         state: present
         name: "zusam"
+        force_source: true
         build:
           path: "/tmp/git/zusam_{{ ansible_date_time['epoch'] }}/"
           pull: yes
